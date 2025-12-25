@@ -1,6 +1,16 @@
 import '../../../models/player.dart';
+import '../../../models/mode.dart';
+import 'turn_order.dart';
 
-enum ImpostorGamePhase { setup, clueGiving, debate, voting, reveal, gameOver }
+enum ImpostorGamePhase {
+  landing,
+  setup,
+  clueGiving,
+  debate,
+  voting,
+  reveal,
+  gameOver,
+}
 
 enum GameResult { innocentsWin, impostorWins, none }
 
@@ -13,16 +23,26 @@ class ImpostorGameState {
   final String? eliminatedPlayerId;
   final GameResult result;
   final String? impostorGuess;
+  final Mode? gameMode;
+  final TurnOrder? turnOrder;
+  final int currentRound;
+  final int maxGuessingPhases;
+  final int currentGuessingPhase;
 
   ImpostorGameState({
     required this.players,
-    this.phase = ImpostorGamePhase.setup,
+    this.phase = ImpostorGamePhase.landing,
     this.secretWord,
     this.currentPlayerIndex = 0,
     this.votes = const {},
     this.eliminatedPlayerId,
     this.result = GameResult.none,
     this.impostorGuess,
+    this.gameMode,
+    this.turnOrder,
+    this.currentRound = 1,
+    this.maxGuessingPhases = 2,
+    this.currentGuessingPhase = 1,
   });
 
   ImpostorGameState copyWith({
@@ -34,6 +54,11 @@ class ImpostorGameState {
     String? eliminatedPlayerId,
     GameResult? result,
     String? impostorGuess,
+    Mode? gameMode,
+    TurnOrder? turnOrder,
+    int? currentRound,
+    int? maxGuessingPhases,
+    int? currentGuessingPhase,
   }) {
     return ImpostorGameState(
       players: players ?? this.players,
@@ -44,6 +69,11 @@ class ImpostorGameState {
       eliminatedPlayerId: eliminatedPlayerId ?? this.eliminatedPlayerId,
       result: result ?? this.result,
       impostorGuess: impostorGuess ?? this.impostorGuess,
+      gameMode: gameMode ?? this.gameMode,
+      turnOrder: turnOrder ?? this.turnOrder,
+      currentRound: currentRound ?? this.currentRound,
+      maxGuessingPhases: maxGuessingPhases ?? this.maxGuessingPhases,
+      currentGuessingPhase: currentGuessingPhase ?? this.currentGuessingPhase,
     );
   }
 

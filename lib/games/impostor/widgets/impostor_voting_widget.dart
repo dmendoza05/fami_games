@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../providers/impostor_game_provider.dart';
+import '../../../models/mode.dart';
 
 class ImpostorVotingWidget extends HookConsumerWidget {
   const ImpostorVotingWidget({super.key});
@@ -25,18 +26,20 @@ class ImpostorVotingWidget extends HookConsumerWidget {
       return null;
     }, []);
 
+    final isSelfMultiplayer = gameState.gameMode == Mode.selfMultiplayer;
+    final activePlayers = gameState.players
+        .where((p) => !(p.isEliminated))
+        .toList();
+
     void submitVote(String voterId, String votedPlayerId) {
       ref
           .read(impostorGameProvider.notifier)
           .submitVote(voterId, votedPlayerId);
     }
 
-    // For demo purposes, we'll show all players and let each vote
-    // In a real multiplayer game, you'd track which player is voting
-    final activePlayers = gameState.players
-        .where((p) => !(p.isEliminated))
-        .toList();
-    final hasVoted = gameState.votes.isNotEmpty;
+    void hostPickImpostor(String pickedPlayerId) {
+      ref.read(impostorGameProvider.notifier).hostPickImpostor(pickedPlayerId);
+    }
 
     return FadeTransition(
       opacity: fadeAnimation,
@@ -79,7 +82,9 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Vote for who you think is the impostor',
+                          isSelfMultiplayer
+                              ? 'Host: Pick who you think is the impostor'
+                              : 'Vote for who you think is the impostor',
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: Colors.grey[600]),
                           textAlign: TextAlign.center,
@@ -152,7 +157,7 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
-                                        if (voteCount > 0)
+                                        if (!isSelfMultiplayer && voteCount > 0)
                                           Text(
                                             '$voteCount vote${voteCount > 1 ? 's' : ''}',
                                             style: Theme.of(context)
@@ -181,13 +186,17 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                     },
                   ),
                 ),
-                if (selectedPlayerId.value != null && !hasVoted)
+                if (selectedPlayerId.value != null)
                   ElevatedButton(
                     onPressed: () {
-                      // In a real app, you'd use the current player's ID
-                      // For demo, we'll use the first active player
-                      final voterId = activePlayers.first.id;
-                      submitVote(voterId, selectedPlayerId.value!);
+                      if (isSelfMultiplayer) {
+                        // Host picks impostor directly
+                        hostPickImpostor(selectedPlayerId.value!);
+                      } else {
+                        // Regular voting
+                        final voterId = activePlayers.first.id;
+                        submitVote(voterId, selectedPlayerId.value!);
+                      }
                       selectedPlayerId.value = null;
                     },
                     style: ElevatedButton.styleFrom(
@@ -196,12 +205,14 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text(
-                      'Submit Vote',
-                      style: TextStyle(fontSize: 16),
+                    child: Text(
+                      isSelfMultiplayer ? 'Pick Impostor' : 'Submit Vote',
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
-                if (hasVoted && !gameState.allPlayersVoted)
+                if (!isSelfMultiplayer &&
+                    gameState.votes.isNotEmpty &&
+                    !gameState.allPlayersVoted)
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(

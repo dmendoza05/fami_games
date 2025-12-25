@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../theme/app_theme.dart';
 import '../models/impostor_game_state.dart';
 import '../providers/impostor_game_provider.dart';
+import '../widgets/impostor_landing_widget.dart';
 import '../widgets/impostor_setup_widget.dart';
 import '../widgets/impostor_clue_widget.dart';
 import '../widgets/impostor_debate_widget.dart';
@@ -18,44 +19,6 @@ class ImpostorGameScreen extends HookConsumerWidget {
     final gameState = ref.watch(impostorGameProvider);
 
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('Impostor'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            if (gameState.phase == ImpostorGamePhase.setup ||
-                gameState.phase == ImpostorGamePhase.gameOver) {
-              Navigator.pop(context);
-            } else {
-              // Show confirmation dialog
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Leave Game?'),
-                  content: const Text(
-                    'Are you sure you want to leave? Progress will be lost.',
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        ref.read(impostorGameProvider.notifier).resetGame();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Leave'),
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      ),
       body: Container(
         decoration: AppTheme.gradientDecoration,
         child: _buildPhaseContent(context, ref, gameState),
@@ -69,6 +32,8 @@ class ImpostorGameScreen extends HookConsumerWidget {
     ImpostorGameState gameState,
   ) {
     switch (gameState.phase) {
+      case ImpostorGamePhase.landing:
+        return const ImpostorLandingWidget();
       case ImpostorGamePhase.setup:
         return const ImpostorSetupWidget();
       case ImpostorGamePhase.clueGiving:
