@@ -1,19 +1,8 @@
 import '../../../models/player.dart';
 
-enum ImpostorGamePhase {
-  setup,
-  clueGiving,
-  debate,
-  voting,
-  reveal,
-  gameOver,
-}
+enum ImpostorGamePhase { setup, clueGiving, debate, voting, reveal, gameOver }
 
-enum GameResult {
-  innocentsWin,
-  impostorWins,
-  none,
-}
+enum GameResult { innocentsWin, impostorWins, none }
 
 class ImpostorGameState {
   final List<Player> players;
@@ -82,4 +71,3 @@ class ImpostorGameState {
     return votes.length == activePlayers.length;
   }
 }
-

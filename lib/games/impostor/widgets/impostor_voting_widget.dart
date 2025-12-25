@@ -15,10 +15,7 @@ class ImpostorVotingWidget extends HookConsumerWidget {
     );
     final fadeAnimation = useMemoized(
       () => Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.easeIn,
-        ),
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn),
       ),
       [animationController],
     );
@@ -29,12 +26,16 @@ class ImpostorVotingWidget extends HookConsumerWidget {
     }, []);
 
     void submitVote(String voterId, String votedPlayerId) {
-      ref.read(impostorGameProvider.notifier).submitVote(voterId, votedPlayerId);
+      ref
+          .read(impostorGameProvider.notifier)
+          .submitVote(voterId, votedPlayerId);
     }
 
     // For demo purposes, we'll show all players and let each vote
     // In a real multiplayer game, you'd track which player is voting
-    final activePlayers = gameState.players.where((p) => !(p.isEliminated)).toList();
+    final activePlayers = gameState.players
+        .where((p) => !(p.isEliminated))
+        .toList();
     final hasVoted = gameState.votes.isNotEmpty;
 
     return FadeTransition(
@@ -73,16 +74,14 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                         const SizedBox(height: 16),
                         Text(
                           'Voting Phase',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Vote for who you think is the impostor',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Colors.grey[600],
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: Colors.grey[600]),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -124,13 +123,15 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                                 children: [
                                   CircleAvatar(
                                     radius: 24,
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.primaryContainer,
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
                                     child: Text(
                                       player.name[0].toUpperCase(),
                                       style: TextStyle(
-                                        color:
-                                            Theme.of(context).colorScheme.onPrimaryContainer,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onPrimaryContainer,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18,
                                       ),
@@ -139,18 +140,25 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           player.name,
-                                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium
+                                              ?.copyWith(
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
                                         if (voteCount > 0)
                                           Text(
                                             '$voteCount vote${voteCount > 1 ? 's' : ''}',
-                                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall
+                                                ?.copyWith(
                                                   color: Colors.grey[600],
                                                 ),
                                           ),
@@ -160,7 +168,9 @@ class ImpostorVotingWidget extends HookConsumerWidget {
                                   if (isSelected)
                                     Icon(
                                       Icons.check_circle,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.primary,
                                     ),
                                 ],
                               ),
@@ -212,4 +222,3 @@ class ImpostorVotingWidget extends HookConsumerWidget {
     );
   }
 }
-

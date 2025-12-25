@@ -16,10 +16,7 @@ class ImpostorClueWidget extends HookConsumerWidget {
     );
     final fadeAnimation = useMemoized(
       () => Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.easeIn,
-        ),
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn),
       ),
       [animationController],
     );
@@ -33,7 +30,8 @@ class ImpostorClueWidget extends HookConsumerWidget {
     if (currentPlayer == null) return const SizedBox();
 
     final isImpostor = currentPlayer.isImpostor;
-    final hasGivenClue = currentPlayer.clue != null && currentPlayer.clue!.isNotEmpty;
+    final hasGivenClue =
+        currentPlayer.clue != null && currentPlayer.clue!.isNotEmpty;
 
     void submitClue() {
       final clue = clueController.text.trim();
@@ -47,10 +45,9 @@ class ImpostorClueWidget extends HookConsumerWidget {
         return;
       }
 
-      ref.read(impostorGameProvider.notifier).submitClue(
-            currentPlayer.id,
-            clue,
-          );
+      ref
+          .read(impostorGameProvider.notifier)
+          .submitClue(currentPlayer.id, clue);
       clueController.clear();
     }
 
@@ -83,8 +80,11 @@ class ImpostorClueWidget extends HookConsumerWidget {
                     child: Column(
                       children: [
                         Text(
-                          isImpostor ? '🎭 You are the IMPOSTOR!' : '✅ You are innocent',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          isImpostor
+                              ? '🎭 You are the IMPOSTOR!'
+                              : '✅ You are innocent',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: isImpostor ? Colors.red : Colors.green,
                               ),
@@ -95,14 +95,18 @@ class ImpostorClueWidget extends HookConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.primaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.primaryContainer,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
                               children: [
                                 Text(
                                   'Secret Word',
-                                  style: Theme.of(context).textTheme.labelMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
@@ -110,9 +114,7 @@ class ImpostorClueWidget extends HookConsumerWidget {
                                   style: Theme.of(context)
                                       .textTheme
                                       .headlineMedium
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -148,16 +150,16 @@ class ImpostorClueWidget extends HookConsumerWidget {
                 Text(
                   '${currentPlayer.name}\'s Turn',
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Give a one-word clue related to the secret word',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -221,9 +223,14 @@ class ImpostorClueWidget extends HookConsumerWidget {
     );
   }
 
-  Widget _buildProgressIndicator(BuildContext context, ImpostorGameState gameState) {
+  Widget _buildProgressIndicator(
+    BuildContext context,
+    ImpostorGameState gameState,
+  ) {
     final total = gameState.players.length;
-    final completed = gameState.players.where((p) => p.clue != null && p.clue?.isNotEmpty == true).length;
+    final completed = gameState.players
+        .where((p) => p.clue != null && p.clue?.isNotEmpty == true)
+        .length;
 
     return Column(
       children: [
@@ -242,4 +249,3 @@ class ImpostorClueWidget extends HookConsumerWidget {
     );
   }
 }
-

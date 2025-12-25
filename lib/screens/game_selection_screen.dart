@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../models/game.dart';
 import '../games/impostor/screens/impostor_game_screen.dart';
+import '../theme/app_theme.dart';
 
 class GameSelectionScreen extends HookConsumerWidget {
   const GameSelectionScreen({super.key});
@@ -14,10 +15,7 @@ class GameSelectionScreen extends HookConsumerWidget {
     );
     final fadeAnimation = useMemoized(
       () => Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.easeIn,
-        ),
+        CurvedAnimation(parent: animationController, curve: Curves.easeIn),
       ),
       [animationController],
     );
@@ -28,49 +26,17 @@ class GameSelectionScreen extends HookConsumerWidget {
     }, []);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Fami Games',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: FadeTransition(
-        opacity: fadeAnimation,
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Theme.of(context).colorScheme.primaryContainer,
-                Theme.of(context).colorScheme.surface,
-              ],
-            ),
-          ),
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: AppTheme.gradientDecoration,
+        child: FadeTransition(
+          opacity: fadeAnimation,
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(AppTheme.spacingL),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text(
-                    'Select a Game',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Choose a game to play with your group',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey[600],
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 32),
                   Expanded(
                     child: ListView.builder(
                       itemCount: Game.availableGames.length,
@@ -81,8 +47,37 @@ class GameSelectionScreen extends HookConsumerWidget {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const ImpostorGameScreen(),
+                              PageRouteBuilder(
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        const ImpostorGameScreen(),
+                                transitionsBuilder:
+                                    (
+                                      context,
+                                      animation,
+                                      secondaryAnimation,
+                                      child,
+                                    ) {
+                                      const begin = Offset(1.0, 0.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.easeInOut;
+
+                                      var tween = Tween(
+                                        begin: begin,
+                                        end: end,
+                                      ).chain(CurveTween(curve: curve));
+
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: FadeTransition(
+                                          opacity: animation,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                transitionDuration: const Duration(
+                                  milliseconds: 300,
+                                ),
                               ),
                             );
                           },
@@ -104,10 +99,7 @@ class _GameCard extends HookWidget {
   final Game game;
   final VoidCallback onTap;
 
-  const _GameCard({
-    required this.game,
-    required this.onTap,
-  });
+  const _GameCard({required this.game, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -116,10 +108,7 @@ class _GameCard extends HookWidget {
     );
     final scaleAnimation = useMemoized(
       () => Tween<double>(begin: 1.0, end: 0.95).animate(
-        CurvedAnimation(
-          parent: scaleController,
-          curve: Curves.easeInOut,
-        ),
+        CurvedAnimation(parent: scaleController, curve: Curves.easeInOut),
       ),
       [scaleController],
     );
@@ -134,18 +123,8 @@ class _GameCard extends HookWidget {
       child: ScaleTransition(
         scale: scaleAnimation,
         child: Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
+          margin: const EdgeInsets.only(bottom: AppTheme.spacingM),
+          decoration: AppTheme.glassCardDecoration,
           child: Padding(
             padding: const EdgeInsets.all(20.0),
             child: Row(
@@ -154,8 +133,8 @@ class _GameCard extends HookWidget {
                   width: 60,
                   height: 60,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(12),
+                    color: AppTheme.glassIconBackground,
+                    borderRadius: BorderRadius.circular(AppTheme.radiusM),
                   ),
                   child: Center(
                     child: Text(
@@ -164,31 +143,21 @@ class _GameCard extends HookWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 16),
+                const SizedBox(width: AppTheme.spacingM),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        game.name,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        game.description,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Colors.grey[600],
-                            ),
-                      ),
+                      Text(game.name, style: AppTheme.titleLarge),
+                      const SizedBox(height: AppTheme.spacingXS),
+                      Text(game.description, style: AppTheme.bodyMedium),
                     ],
                   ),
                 ),
                 Icon(
                   Icons.arrow_forward_ios,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 20,
+                  color: AppTheme.textSecondary,
+                  size: 18,
                 ),
               ],
             ),
@@ -198,4 +167,3 @@ class _GameCard extends HookWidget {
     );
   }
 }
-

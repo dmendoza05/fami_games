@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_hooks: ^0.20.5
   hooks_riverpod: ^2.5.1
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -89,3 +90,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  fonts:
+    - family: Zen Antique
+      fonts:
+        - asset: fonts/ZenAntique-Regular.ttf
+          weight: 400

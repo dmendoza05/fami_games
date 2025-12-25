@@ -15,10 +15,7 @@ class ImpostorRevealWidget extends HookConsumerWidget {
     );
     final scaleAnimation = useMemoized(
       () => Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.elasticOut,
-        ),
+        CurvedAnimation(parent: animationController, curve: Curves.elasticOut),
       ),
       [animationController],
     );
@@ -30,7 +27,9 @@ class ImpostorRevealWidget extends HookConsumerWidget {
 
     final eliminatedPlayer = gameState.players.firstWhere(
       (p) => p.id == gameState.eliminatedPlayerId,
-      orElse: () => gameState.players.isNotEmpty ? gameState.players.first : throw StateError('No players'),
+      orElse: () => gameState.players.isNotEmpty
+          ? gameState.players.first
+          : throw StateError('No players'),
     );
     final isImpostorEliminated = eliminatedPlayer.isImpostor;
 
@@ -82,16 +81,19 @@ class ImpostorRevealWidget extends HookConsumerWidget {
                     child: Column(
                       children: [
                         Icon(
-                          isImpostorEliminated ? Icons.celebration : Icons.check_circle,
+                          isImpostorEliminated
+                              ? Icons.celebration
+                              : Icons.check_circle,
                           size: 64,
-                          color: isImpostorEliminated ? Colors.green : Colors.orange,
+                          color: isImpostorEliminated
+                              ? Colors.green
+                              : Colors.orange,
                         ),
                         const SizedBox(height: 16),
                         Text(
                           eliminatedPlayer.name,
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Container(
@@ -106,10 +108,15 @@ class ImpostorRevealWidget extends HookConsumerWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            isImpostorEliminated ? '🎭 IMPOSTOR!' : '✅ Innocent',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            isImpostorEliminated
+                                ? '🎭 IMPOSTOR!'
+                                : '✅ Innocent',
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
                                   fontWeight: FontWeight.bold,
-                                  color: isImpostorEliminated ? Colors.red : Colors.green,
+                                  color: isImpostorEliminated
+                                      ? Colors.red
+                                      : Colors.green,
                                 ),
                           ),
                         ),
@@ -139,17 +146,15 @@ class ImpostorRevealWidget extends HookConsumerWidget {
                         children: [
                           Text(
                             'Impostor\'s Last Chance!',
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'Guess the secret word to win',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Colors.grey[600],
-                                ),
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(color: Colors.grey[600]),
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 24),
@@ -174,7 +179,9 @@ class ImpostorRevealWidget extends HookConsumerWidget {
                                 child: OutlinedButton(
                                   onPressed: skipGuess,
                                   style: OutlinedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -188,7 +195,9 @@ class ImpostorRevealWidget extends HookConsumerWidget {
                                 child: ElevatedButton(
                                   onPressed: submitGuess,
                                   style: ElevatedButton.styleFrom(
-                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 16,
+                                    ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
                                     ),
@@ -208,7 +217,9 @@ class ImpostorRevealWidget extends HookConsumerWidget {
                   ElevatedButton(
                     onPressed: () {
                       // Show game over with innocents winning
-                      ref.read(impostorGameProvider.notifier).skipImpostorGuess();
+                      ref
+                          .read(impostorGameProvider.notifier)
+                          .skipImpostorGuess();
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
@@ -230,4 +241,3 @@ class ImpostorRevealWidget extends HookConsumerWidget {
     );
   }
 }
-

@@ -13,12 +13,10 @@ class ImpostorSetupWidget extends HookConsumerWidget {
       duration: const Duration(milliseconds: 300),
     );
     final slideAnimation = useMemoized(
-      () => Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.easeOut,
-        ),
-      ),
+      () =>
+          Tween<Offset>(begin: const Offset(0, 0.1), end: Offset.zero).animate(
+            CurvedAnimation(parent: animationController, curve: Curves.easeOut),
+          ),
       [animationController],
     );
 
@@ -65,10 +63,7 @@ class ImpostorSetupWidget extends HookConsumerWidget {
         ref.read(impostorGameProvider.notifier).initializeGame(validNames);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString()),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
         );
       }
     }
@@ -95,16 +90,16 @@ class ImpostorSetupWidget extends HookConsumerWidget {
                 Text(
                   'Setup Players',
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
                 Text(
                   'Add at least 3 players to start the game',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 32),
@@ -125,9 +120,9 @@ class ImpostorSetupWidget extends HookConsumerWidget {
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   filled: true,
-                                  fillColor: Theme.of(context)
-                                      .colorScheme
-                                      .surface,
+                                  fillColor: Theme.of(
+                                    context,
+                                  ).colorScheme.surface,
                                 ),
                                 onChanged: (value) =>
                                     updatePlayerName(index, value),
@@ -187,4 +182,3 @@ class ImpostorSetupWidget extends HookConsumerWidget {
     );
   }
 }
-

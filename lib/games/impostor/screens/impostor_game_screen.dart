@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import '../../../theme/app_theme.dart';
 import '../models/impostor_game_state.dart';
 import '../providers/impostor_game_provider.dart';
 import '../widgets/impostor_setup_widget.dart';
@@ -17,6 +18,7 @@ class ImpostorGameScreen extends HookConsumerWidget {
     final gameState = ref.watch(impostorGameProvider);
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Impostor'),
         leading: IconButton(
@@ -31,7 +33,9 @@ class ImpostorGameScreen extends HookConsumerWidget {
                 context: context,
                 builder: (context) => AlertDialog(
                   title: const Text('Leave Game?'),
-                  content: const Text('Are you sure you want to leave? Progress will be lost.'),
+                  content: const Text(
+                    'Are you sure you want to leave? Progress will be lost.',
+                  ),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -52,7 +56,10 @@ class ImpostorGameScreen extends HookConsumerWidget {
           },
         ),
       ),
-      body: _buildPhaseContent(context, ref, gameState),
+      body: Container(
+        decoration: AppTheme.gradientDecoration,
+        child: _buildPhaseContent(context, ref, gameState),
+      ),
     );
   }
 
@@ -77,4 +84,3 @@ class ImpostorGameScreen extends HookConsumerWidget {
     }
   }
 }
-

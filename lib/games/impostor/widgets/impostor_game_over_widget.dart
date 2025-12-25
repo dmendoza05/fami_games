@@ -15,10 +15,7 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
     );
     final scaleAnimation = useMemoized(
       () => Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(
-          parent: animationController,
-          curve: Curves.elasticOut,
-        ),
+        CurvedAnimation(parent: animationController, curve: Curves.elasticOut),
       ),
       [animationController],
     );
@@ -80,7 +77,8 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
                     const SizedBox(height: 24),
                     Text(
                       impostorWins ? 'Impostor Wins!' : 'Innocents Win!',
-                      style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      style: Theme.of(context).textTheme.displayMedium
+                          ?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: impostorWins ? Colors.red : Colors.green,
                           ),
@@ -104,16 +102,17 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
                       children: [
                         Text(
                           'Game Summary',
-                          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(height: 24),
                         Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.primaryContainer,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primaryContainer,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Column(
@@ -125,9 +124,8 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
                               const SizedBox(height: 8),
                               Text(
                                 gameState.secretWord ?? '',
-                                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
@@ -147,9 +145,8 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
                                 const SizedBox(width: 8),
                                 Text(
                                   'Impostor: ${impostor.name}',
-                                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -159,14 +156,18 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondaryContainer,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.secondaryContainer,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Column(
                               children: [
                                 Text(
                                   'Impostor\'s Guess',
-                                  style: Theme.of(context).textTheme.labelMedium,
+                                  style: Theme.of(
+                                    context,
+                                  ).textTheme.labelMedium,
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
@@ -176,9 +177,12 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
                                 const SizedBox(height: 8),
                                 Text(
                                   impostorWins ? '✅ Correct!' : '❌ Wrong!',
-                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  style: Theme.of(context).textTheme.bodyMedium
+                                      ?.copyWith(
                                         fontWeight: FontWeight.bold,
-                                        color: impostorWins ? Colors.green : Colors.red,
+                                        color: impostorWins
+                                            ? Colors.green
+                                            : Colors.red,
                                       ),
                                 ),
                               ],
@@ -233,4 +237,3 @@ class ImpostorGameOverWidget extends HookConsumerWidget {
     );
   }
 }
-
